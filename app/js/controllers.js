@@ -10,5 +10,5 @@ smokeymonkeyControllers.controller('ItemListCtrl', ['$scope', '$http',
       $scope.items = data;
     });
 
-    $scope.orderProp = 'no';
+    $scope.orderProp = 'id';
   }]);
