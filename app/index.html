@@ -13,9 +13,34 @@
   <script src="js/filters.js"></script>
   <script src="js/services.js"></script>
 </head>
-<body>
+<body ng-controller="ItemListCtrl">
 
   <div>@smokeymonkey Amazon Prize Life Gallery</div>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span2">
+        <!--Sidebar content-->
+
+        Search: <input ng-model="query">
+        Sort by:
+        <select ng-model="orderProp">
+          <option value="name">Alphabetical</option>
+          <option value="no">Newest</option>
+        </select>
+
+      </div>
+      <div class="span10">
+        <ul class="items">
+          <li ng-repeat="item in items | filter:query | orderBy:orderProp">
+            {{item.name}}
+            <p>{{item.snippet}}</p>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
