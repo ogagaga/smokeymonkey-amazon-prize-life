@@ -21,7 +21,6 @@ class TwitterSearch
   end
 
   def search
-    # @client.search("#hokkathon -rt", :count => 3, :result_type => "recent", :include_entities => true).take(3).collect do |tweet|
     @client.search("from:smokeymonkey #昼飯 -rt", :count => 3, :result_type => "recent", :include_entities => true).take(3).collect do |tweet|
       puts "#{tweet.id} :#{tweet.user.screen_name}: #{tweet.text} : #{tweet.created_at}"
       puts "#{tweet.user.profile_image_url}"
