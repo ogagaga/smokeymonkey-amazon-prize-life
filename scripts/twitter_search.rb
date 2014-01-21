@@ -3,6 +3,8 @@
 require "yaml"
 require "twitter"
 require 'json'
+require 'nokogiri'
+require 'open-uri'
 
 class TwitterSearch
 
@@ -23,28 +25,25 @@ class TwitterSearch
 
   def search
     puts "--- search api ---"
-    @client.search("from:smokeymonkey #昼飯 -rt", :count => 3, :result_type => "recent", :include_entities => true).take(1).collect do |tweet|
+    @client.search("from:smokeymonkey #昼飯 -rt", :count => 5, :result_type => "recent", :include_entities => true).take(5).collect do |tweet|
       puts "=== #{tweet.created_at} ==="
       puts "    #{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
-      puts "    #{tweet.user.profile_image_url}"
-      puts "    image url : #{tweet.urls[0].expanded_url}"
+      if tweet.urls[0].nil?
+        puts "    tweet.urls[0].expanded_url is nil"
+        next
+      else
+        puts "    #{tweet.urls[0].expanded_url}"
+      end
 
-      image = "#{tweet.urls[0].expanded_url}"
-      id = image.match(%r{http://instagram.com/p/(.+?)/})[1]
-      puts id
+      expanded_url = "#{tweet.urls[0].expanded_url}"
+      # id = expanded_url.match(%r{http://instagram.com/p/(.+?)/})[1]
+      # puts id
+      # large_url = "http://instagr.am/p/#{id}/media/?size=l"
+      # puts "    #{large_url}"
 
-      large_url = "http://instagr.am/p/#{id}/media/?size=l"
-      puts large_url
-
-      # Instagramのサムネイル取得方法
-      # http://staku.designbits.jp/get-instagram-thumbnail-url/
-      # ====
-      # example url (612x612)
-      # http://instagr.am/p/jantawrSaj/media/?size=l
-
-      # large_url を Nokogiri で解析して
-      # image tag の src属性の画像をダウンロードする
-
+      doc = Nokogiri::HTML(open(expanded_url))
+      download_image_url = doc.search('//meta[@property="og:image"]/@content').first
+      puts "    #{download_image_url}"
     end
   end
 
