@@ -28,13 +28,22 @@ class TwitterSearch
       puts "    #{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
       puts "    #{tweet.user.profile_image_url}"
       puts "    image url : #{tweet.urls[0].expanded_url}"
-      image = tweet.urls[0].expanded_url
+
+      image = "#{tweet.urls[0].expanded_url}"
+      id = image.match(%r{http://instagram.com/p/(.+?)/})[1]
+      puts id
+
+      large_url = "http://instagr.am/p/#{id}/media/?size=l"
+      puts large_url
 
       # Instagramのサムネイル取得方法
       # http://staku.designbits.jp/get-instagram-thumbnail-url/
       # ====
       # example url (612x612)
       # http://instagr.am/p/jantawrSaj/media/?size=l
+
+      # large_url を Nokogiri で解析して
+      # image tag の src属性の画像をダウンロードする
 
     end
   end
@@ -59,8 +68,8 @@ end
 twitter_search = TwitterSearch.new
 twitter_search.search
 
-time_line = twitter_search.get_all_tweets("smokeymonkey")
-time_line.each do |tweet|
-  puts tweet.created_at
-  puts tweet.text
-end
+# time_line = twitter_search.get_all_tweets("smokeymonkey")
+# time_line.each do |tweet|
+#   puts tweet.created_at
+#   puts tweet.text
+# end
