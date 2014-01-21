@@ -2,6 +2,7 @@
 #encoding:UTF-8
 require "yaml"
 require "twitter"
+require 'json'
 
 class TwitterSearch
 
@@ -21,9 +22,20 @@ class TwitterSearch
   end
 
   def search
-    @client.search("from:smokeymonkey #昼飯 -rt", :count => 3, :result_type => "recent", :include_entities => true).take(3).collect do |tweet|
-      puts "#{tweet.id} :#{tweet.user.screen_name}: #{tweet.text} : #{tweet.created_at}"
-      puts "#{tweet.user.profile_image_url}"
+    puts "--- search api ---"
+    @client.search("from:smokeymonkey #昼飯 -rt", :count => 3, :result_type => "recent", :include_entities => true).take(1).collect do |tweet|
+      puts "=== #{tweet.created_at} ==="
+      puts "    #{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
+      puts "    #{tweet.user.profile_image_url}"
+      puts "    image url : #{tweet.urls[0].expanded_url}"
+      image = tweet.urls[0].expanded_url
+
+      # Instagramのサムネイル取得方法
+      # http://staku.designbits.jp/get-instagram-thumbnail-url/
+      # ====
+      # example url (612x612)
+      # http://instagr.am/p/jantawrSaj/media/?size=l
+
     end
   end
 
@@ -34,6 +46,7 @@ class TwitterSearch
   end
 
   def get_all_tweets(user)
+    puts "--- get_all_tweets ---"
     collect_with_max_id do |max_id|
       options = {:count => 200, :include_rts => true}
       options[:max_id] = max_id unless max_id.nil?
@@ -48,5 +61,6 @@ twitter_search.search
 
 time_line = twitter_search.get_all_tweets("smokeymonkey")
 time_line.each do |tweet|
+  puts tweet.created_at
   puts tweet.text
 end
