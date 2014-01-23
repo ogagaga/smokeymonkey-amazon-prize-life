@@ -25,21 +25,35 @@ class TwitterSearch
 
   def search
     puts "--- search api ---"
-    @client.search("from:smokeymonkey #昼飯 -rt", :count => 5, :result_type => "recent", :include_entities => true).take(5).collect do |tweet|
+    # @client.search("from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt", :count => 1500, :result_type => "mixed", :include_entities => true).each_with_index do |tweet|
+    @client.search("from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt", :count => 3000, :include_entities => true).each_with_index do |tweet, index|
+
       puts "=== #{tweet.created_at} ==="
       puts "    #{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
+
+      data = Array.new
+      data << {
+        :created_at => "#{tweet.created_at}",
+        :no => index ,
+        :id => "relief-goods-#{"%02d" % index}",
+      }
+      puts JSON.pretty_generate(data)
+
+      # File.open("./temp.json","w") do |f|
+      #   f.write(JSON.pretty_generate(data))
+      # end
+
       if tweet.urls[0].nil?
-        puts "    tweet.urls[0].expanded_url is nil"
+        puts "    tweet.urls[0].expanded_url is not match to instagram"
         next
-      else
-        puts "    #{tweet.urls[0].expanded_url}"
       end
 
+      puts "    expanded_url:#{tweet.urls[0].expanded_url}"
       expanded_url = "#{tweet.urls[0].expanded_url}"
-      # id = expanded_url.match(%r{http://instagram.com/p/(.+?)/})[1]
-      # puts id
-      # large_url = "http://instagr.am/p/#{id}/media/?size=l"
-      # puts "    #{large_url}"
+
+      if expanded_url.match(%r{instagram.com}).nil?
+        next
+      end
 
       doc = Nokogiri::HTML(open(expanded_url))
       download_image_url = doc.search('//meta[@property="og:image"]/@content').first
@@ -60,6 +74,14 @@ class TwitterSearch
       options[:max_id] = max_id unless max_id.nil?
       @client.user_timeline(user, options)
     end
+  end
+
+  def run_search
+    # tweet取得
+
+    # 画像ダウンロード
+    
+    # json書き込み
   end
 
 end
