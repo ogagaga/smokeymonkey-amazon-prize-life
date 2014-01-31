@@ -26,7 +26,7 @@ class TwitterSearch
   def search
     puts "--- search api ---"
     # @client.search("from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt", :count => 1500, :result_type => "mixed", :include_entities => true).each_with_index do |tweet|
-    @client.search("from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt", :count => 3000, :include_entities => true).each_with_index do |tweet, index|
+    @client.search("from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt +since:2014-01-10+until:2014-01-30", :count => 100, :result_type => "mixed", :include_entities => true).each_with_index do |tweet, index|
 
       puts "=== #{tweet.created_at} ==="
       puts "    #{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
