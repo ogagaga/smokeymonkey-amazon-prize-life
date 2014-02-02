@@ -85,20 +85,30 @@ class TwitterSearch
 
   def get_user_timeline(user_id, count)
     maxid = 0
-    timeline = @client.user_timeline(user_id, :count => count)
-    timeline.each do |status|
+    @results = @client.user_timeline(user_id, :count => count)
+    @results.each do |status|
       str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-      # puts str
+      puts str
       maxid = status[:id]-1
-      pp status.to_hash
+      # pp status.to_hash
+      save(@results, "../app/items/smokeymonkey_tweet.json", "a")
     end
 
-    3.times {
-      timeline = @client.user_timeline(user_id, :count => count,:max_id => maxid)
-      timeline.each do |status|
+    7.times {
+      @results = @client.user_timeline(user_id, :count => count,:max_id => maxid)
+      @results.each do |status|
         str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-        # puts str
+        puts str
         maxid = status[:id]-1
+        save(@results, "../app/items/smokeymonkey_tweet.json", "a")
+      end
+    }
+  end
+
+  def save(obj, file_name, mode)
+    File.open(file_name, mode) { |file|
+      obj.each do |status|
+        file.puts status.to_hash.to_json
       end
     }
   end
@@ -114,15 +124,9 @@ class TwitterSearch
 end
 
 twitter_search = TwitterSearch.new
+twitter_search.get_user_timeline("smokeymonkey", 200)
 # twitter_search.search
 # twitter_search.dump
-twitter_search.get_user_timeline("smokeymonkey", 200)
 
-# time_line = twitter_search.get_all_tweets("smokeymonkey")
-# time_line.each do |tweet|
-#   puts tweet.created_at
-#   puts tweet.text
-# end
-# puts time_line.count
 
 
