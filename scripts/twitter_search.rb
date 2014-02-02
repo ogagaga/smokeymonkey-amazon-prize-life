@@ -24,12 +24,18 @@ class TwitterSearch
     end
   end
 
+  def dump
+    @results.each do |status|
+      pp status.to_hash
+    end
+  end
+
   def search
     pp "--- search api ---"
 
     search_word = "from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt"
-    results = @client.search(search_word, :count => 5, :result_type => "recent", :include_entities => true)
-    results.each_with_index do |tweet, index|
+    @results = @client.search(search_word, :count => 5, :result_type => "recent", :include_entities => true)
+    @results.each_with_index do |tweet, index|
       puts "=== #{tweet.created_at} ==="
       puts "#{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
 
@@ -89,6 +95,7 @@ end
 
 twitter_search = TwitterSearch.new
 twitter_search.search
+# twitter_search.dump
 
 # time_line = twitter_search.get_all_tweets("smokeymonkey")
 # time_line.each do |tweet|
@@ -97,26 +104,26 @@ twitter_search.search
 # end
 # puts time_line.count
 
-maxid = 0
-timeline = @client.user_timeline("smokeymonkey", :count => 100)
-timeline.each{ |status|
-  str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-  puts str
-  maxid = status[:id]-1
-  pp status.to_hash
-}
+# maxid = 0
+# timeline = @client.user_timeline("smokeymonkey", :count => 100)
+# timeline.each{ |status|
+#   str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+#   puts str
+#   maxid = status[:id]-1
+#   pp status.to_hash
+# }
 
-pp timeline.count
+# pp timeline.count
 
-puts "*********************************************"
+# puts "*********************************************"
 
-3.times{
-  timeline =@client.user_timeline("smokeymonkey", :count => 200,:max_id => maxid)
-  timeline.each{ |status|
-    str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-    puts str
-    maxid=status[:id]-1
-  }
-  puts "*********************************************"
-}
+# 3.times{
+#   timeline =@client.user_timeline("smokeymonkey", :count => 200,:max_id => maxid)
+#   timeline.each{ |status|
+#     str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+#     puts str
+#     maxid=status[:id]-1
+#   }
+#   puts "*********************************************"
+# }
 
