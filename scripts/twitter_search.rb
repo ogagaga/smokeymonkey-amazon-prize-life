@@ -83,7 +83,7 @@ class TwitterSearch
     end
   end
 
-  def get_user_timeline(user_id, count)
+  def get_user_timeline(loop_number, user_id, count)
     maxid = 0
     @results = @client.user_timeline(user_id, :count => count)
     @results.each do |status|
@@ -94,7 +94,7 @@ class TwitterSearch
       save(@results, "../app/items/smokeymonkey_tweet.json", "a")
     end
 
-    7.times {
+    loop_number.times {
       @results = @client.user_timeline(user_id, :count => count,:max_id => maxid)
       @results.each do |status|
         str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
@@ -124,7 +124,7 @@ class TwitterSearch
 end
 
 twitter_search = TwitterSearch.new
-twitter_search.get_user_timeline("smokeymonkey", 200)
+twitter_search.get_user_timeline(7, "smokeymonkey", 200)
 # twitter_search.search
 # twitter_search.dump
 
