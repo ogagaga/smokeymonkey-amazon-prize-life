@@ -83,6 +83,26 @@ class TwitterSearch
     end
   end
 
+  def get_user_timeline(user_id, count)
+    maxid = 0
+    timeline = @client.user_timeline(user_id, :count => count)
+    timeline.each do |status|
+      str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+      # puts str
+      maxid = status[:id]-1
+      pp status.to_hash
+    end
+
+    3.times {
+      timeline = @client.user_timeline(user_id, :count => count,:max_id => maxid)
+      timeline.each do |status|
+        str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+        # puts str
+        maxid = status[:id]-1
+      end
+    }
+  end
+
   def run_search
     # tweet取得
 
@@ -94,8 +114,9 @@ class TwitterSearch
 end
 
 twitter_search = TwitterSearch.new
-twitter_search.search
+# twitter_search.search
 # twitter_search.dump
+twitter_search.get_user_timeline("smokeymonkey", 200)
 
 # time_line = twitter_search.get_all_tweets("smokeymonkey")
 # time_line.each do |tweet|
@@ -104,26 +125,4 @@ twitter_search.search
 # end
 # puts time_line.count
 
-# maxid = 0
-# timeline = @client.user_timeline("smokeymonkey", :count => 100)
-# timeline.each{ |status|
-#   str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-#   puts str
-#   maxid = status[:id]-1
-#   pp status.to_hash
-# }
-
-# pp timeline.count
-
-# puts "*********************************************"
-
-# 3.times{
-#   timeline =@client.user_timeline("smokeymonkey", :count => 200,:max_id => maxid)
-#   timeline.each{ |status|
-#     str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-#     puts str
-#     maxid=status[:id]-1
-#   }
-#   puts "*********************************************"
-# }
 
