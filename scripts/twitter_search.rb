@@ -5,6 +5,7 @@ require "twitter"
 require 'json'
 require 'nokogiri'
 require 'open-uri'
+require 'pp'
 
 class TwitterSearch
 
@@ -24,12 +25,13 @@ class TwitterSearch
   end
 
   def search
-    puts "--- search api ---"
-    # @client.search("from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt", :count => 1500, :result_type => "mixed", :include_entities => true).each_with_index do |tweet|
-    @client.search("from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt +since:2014-01-10+until:2014-01-30", :count => 100, :result_type => "mixed", :include_entities => true).each_with_index do |tweet, index|
+    pp "--- search api ---"
 
+    search_word = "from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt"
+    results = @client.search(search_word, :count => 5, :result_type => "recent", :include_entities => true)
+    results.each_with_index do |tweet, index|
       puts "=== #{tweet.created_at} ==="
-      puts "    #{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
+      puts "#{tweet.user.screen_name}(#{tweet.id}): #{tweet.text}"
 
       data = Array.new
       data << {
@@ -38,17 +40,16 @@ class TwitterSearch
         :id => "relief-goods-#{"%02d" % index}",
       }
       puts JSON.pretty_generate(data)
-
       # File.open("./temp.json","w") do |f|
       #   f.write(JSON.pretty_generate(data))
       # end
 
       if tweet.urls[0].nil?
-        puts "    tweet.urls[0].expanded_url is not match to instagram"
+        puts "tweet.urls[0].expanded_url is not match to instagram"
         next
       end
 
-      puts "    expanded_url:#{tweet.urls[0].expanded_url}"
+      puts "expanded_url:#{tweet.urls[0].expanded_url}"
       expanded_url = "#{tweet.urls[0].expanded_url}"
 
       if expanded_url.match(%r{instagram.com}).nil?
@@ -57,7 +58,7 @@ class TwitterSearch
 
       doc = Nokogiri::HTML(open(expanded_url))
       download_image_url = doc.search('//meta[@property="og:image"]/@content').first
-      puts "    #{download_image_url}"
+      puts "#{download_image_url}"
     end
   end
 
@@ -70,7 +71,7 @@ class TwitterSearch
   def get_all_tweets(user)
     puts "--- get_all_tweets ---"
     collect_with_max_id do |max_id|
-      options = {:count => 200, :include_rts => true}
+      options = {:count => 10, :include_rts => true}
       options[:max_id] = max_id unless max_id.nil?
       @client.user_timeline(user, options)
     end
@@ -94,3 +95,28 @@ twitter_search.search
 #   puts tweet.created_at
 #   puts tweet.text
 # end
+# puts time_line.count
+
+maxid = 0
+timeline = @client.user_timeline("smokeymonkey", :count => 100)
+timeline.each{ |status|
+  str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+  puts str
+  maxid = status[:id]-1
+  pp status.to_hash
+}
+
+pp timeline.count
+
+puts "*********************************************"
+
+3.times{
+  timeline =@client.user_timeline("smokeymonkey", :count => 200,:max_id => maxid)
+  timeline.each{ |status|
+    str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+    puts str
+    maxid=status[:id]-1
+  }
+  puts "*********************************************"
+}
+
