@@ -80,11 +80,9 @@ class TwitterSearch
   def get_user_timeline(loop_number, user_id, count)
     maxid = 0
     loop_number.times { |num|
-      options = ""
+      options = {:count => count,:max_id => maxid}
       if num == 0
         options = {:count => count}
-      else
-        options = {:count => count,:max_id => maxid}
       end
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
@@ -93,9 +91,7 @@ class TwitterSearch
           save(@results, "../app/items/smokeymonkey_tweet.json", "a")
           puts str
         end
-
         maxid = status[:id]-1
-        # save(@results, "../app/items/smokeymonkey_tweet.json", "a")
       end
     }
   end
