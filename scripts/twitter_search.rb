@@ -89,9 +89,13 @@ class TwitterSearch
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
         str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-        puts str
+        if  status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
+          save(@results, "../app/items/smokeymonkey_tweet.json", "a")
+          puts str
+        end
+
         maxid = status[:id]-1
-        save(@results, "../app/items/smokeymonkey_tweet.json", "a")
+        # save(@results, "../app/items/smokeymonkey_tweet.json", "a")
       end
     }
   end
@@ -107,7 +111,7 @@ class TwitterSearch
 end
 
 twitter_search = TwitterSearch.new
-twitter_search.get_user_timeline(7, "smokeymonkey", 200)
+twitter_search.get_user_timeline(10, "smokeymonkey", 200)
 # twitter_search.search
 # twitter_search.dump
 
