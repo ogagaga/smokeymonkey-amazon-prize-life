@@ -11,10 +11,7 @@ class TwitterSearch
 
   def initialize
     config_file = File.join('..', 'config', 'twitter_api_conf.yml')
-    #puts config_file
-
     twitter_config = YAML.load(File.open(config_file))
-    #puts "#{twitter_config.inspect}"
 
     @client = Twitter::REST::Client.new do |config|
       config.consumer_key = twitter_config['twitter']['consumer_key']
@@ -31,8 +28,6 @@ class TwitterSearch
   end
 
   def search
-    pp "--- search api ---"
-
     search_word = "from:smokeymonkey #朝飯 OR #昼飯 OR #晩飯 -rt"
     @results = @client.search(search_word, :count => 5, :result_type => "recent", :include_entities => true)
     @results.each_with_index do |tweet, index|
@@ -75,7 +70,6 @@ class TwitterSearch
   end
 
   def get_all_tweets(user)
-    puts "--- get_all_tweets ---"
     collect_with_max_id do |max_id|
       options = {:count => 10, :include_rts => true}
       options[:max_id] = max_id unless max_id.nil?
@@ -108,14 +102,6 @@ class TwitterSearch
         file.puts status.to_hash.to_json
       end
     }
-  end
-
-  def run_search
-    # tweet取得
-
-    # 画像ダウンロード
-    
-    # json書き込み
   end
 
 end
