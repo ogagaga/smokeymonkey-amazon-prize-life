@@ -131,7 +131,7 @@ end
 
 twitter_search = TwitterSearch.new
 twitter_search.get_user_timeline(10, "smokeymonkey", 200)
-twitter_search.save("../app/items/smokeymonkey_tweet.json", "a")
+twitter_search.save("../app/items/smokeymonkey_meal_tweet.json", "a")
 # twitter_search.search
 # twitter_search.dump
 
