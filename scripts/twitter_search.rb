@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/bin/env ruby
 #encoding:UTF-8
 require "yaml"
@@ -5,6 +6,7 @@ require "twitter"
 require 'json'
 require 'nokogiri'
 require 'open-uri'
+require 'time'
 require 'pp'
 
 class TwitterSearch
@@ -79,33 +81,57 @@ class TwitterSearch
 
   def get_user_timeline(loop_number, user_id, count)
     maxid = 0
-    loop_number.times { |num|
+    @data = Array.new
+    loop_number.times do |num|
       options = {:count => count,:max_id => maxid}
       if num == 0
         options = {:count => count}
       end
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
-        str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+        # str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+        # puts str
+        # puts JSON.pretty_generate(status.to_hash)
+
+        # ここのマッチ処理はあとでメソッドにする
         if status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
-          save(status, "../app/items/smokeymonkey_tweet.json", "a")
-          puts str
+          puts JSON.pretty_generate(status.to_hash)
+          if status.urls[0].nil?
+            puts "status.urls[0].expanded_url is not match to instagram"
+            next
+          end
+
+          expanded_url = "#{status.urls[0].expanded_url}"
+          if expanded_url.match(%r{instagram.com}).nil?
+            next
+          end
+          doc = Nokogiri::HTML(open(expanded_url))
+          download_image_url = doc.search('//meta[@property="og:image"]/@content').first
+
+          @data << {
+            :date => (Time.parse("#{status.created_at}")).strftime("%Y-%m-%d %H:%M:%S"),
+            :no => status[:id],
+            :id => status[:id],
+            :snippet => status.text,
+            :imageUrl => download_image_url
+          }
         end
         maxid = status[:id]-1
       end
-    }
+    end
   end
 
-  def save(obj, file_name, mode)
-    File.open(file_name, mode) { |file|
-      file.puts JSON.pretty_generate(obj.to_hash)
-    }
+  def save(file_name, mode)
+    File.open(file_name, mode) do |file|
+      file.puts JSON.pretty_generate(@data)
+    end
   end
 
 end
 
 twitter_search = TwitterSearch.new
 twitter_search.get_user_timeline(10, "smokeymonkey", 200)
+twitter_search.save("../app/items/smokeymonkey_tweet.json", "a")
 # twitter_search.search
 # twitter_search.dump
 
