@@ -89,13 +89,10 @@ class TwitterSearch
       end
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
-        # str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-        # puts str
-        # puts JSON.pretty_generate(status.to_hash)
+        # puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
 
         # ここのマッチ処理はあとでメソッドにする
         if status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
-          puts JSON.pretty_generate(status.to_hash)
           if status.urls[0].nil?
             puts "status.urls[0].expanded_url is not match to instagram"
             next
