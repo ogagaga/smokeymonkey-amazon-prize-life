@@ -87,8 +87,8 @@ class TwitterSearch
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
         str = "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-        if  status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
-          save(@results, "../app/items/smokeymonkey_tweet.json", "a")
+        if status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
+          save(status, "../app/items/smokeymonkey_tweet.json", "a")
           puts str
         end
         maxid = status[:id]-1
@@ -98,9 +98,7 @@ class TwitterSearch
 
   def save(obj, file_name, mode)
     File.open(file_name, mode) { |file|
-      obj.each do |status|
-        file.puts status.to_hash.to_json
-      end
+      file.puts JSON.pretty_generate(obj.to_hash)
     }
   end
 
