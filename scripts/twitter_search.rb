@@ -95,6 +95,7 @@ class TwitterSearch
         maxid = status[:id]-1
       end
     end
+    @data.sort!{ |a, b| a[:date] <=> b[:date] }
   end
 
   def status_text_extract(status)
