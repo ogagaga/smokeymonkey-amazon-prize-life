@@ -90,31 +90,30 @@ class TwitterSearch
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
         # puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
-
-        # ここのマッチ処理はあとでメソッドにする
-        if status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
-          if status.urls[0].nil?
-            puts "status.urls[0].expanded_url is not match to instagram"
-            next
-          end
-
-          expanded_url = "#{status.urls[0].expanded_url}"
-          if expanded_url.match(%r{instagram.com}).nil?
-            next
-          end
-          doc = Nokogiri::HTML(open(expanded_url))
-          download_image_url = doc.search('//meta[@property="og:image"]/@content').first
-
-          @data << {
-            :date => (Time.parse("#{status.created_at}")).strftime("%Y-%m-%d %H:%M:%S"),
-            :no => status[:id],
-            :id => status[:id],
-            :snippet => status.text,
-            :imageUrl => download_image_url
-          }
-        end
+        status_text_extract(status)
         maxid = status[:id]-1
       end
+    end
+  end
+
+  def status_text_extract(status)
+    if status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
+      # puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+      unless status.urls[0].nil?
+        expanded_url = "#{status.urls[0].expanded_url}"
+        unless expanded_url.match(%r{instagram.com}).nil?
+          doc = Nokogiri::HTML(open(expanded_url))
+          download_image_url = doc.search('//meta[@property="og:image"]/@content').first
+        end
+      end
+
+      @data << {
+        :date => (Time.parse("#{status.created_at}")).strftime("%Y-%m-%d %H:%M:%S"),
+        :no => status[:id],
+        :id => status[:id],
+        :snippet => status.text,
+        :imageUrl => download_image_url
+      }
     end
   end
 
