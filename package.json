@@ -1,0 +1,19 @@
+{
+  "name": "smokeymonkey-amazon-prize-life",
+  "version": "0.0.1",
+  "description": "Smokeymonkey Amazon Prize Life Gallery",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ogagaga/smokeymonkey-amazon-prize-life.git"
+  },
+  "author": "y_ogagaga",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/ogagaga/smokeymonkey-amazon-prize-life/issues"
+  },
+  "homepage": "https://github.com/ogagaga/smokeymonkey-amazon-prize-life"
+}
