@@ -81,6 +81,7 @@ class TwitterSearch
 
   def get_user_timeline(loop_number, user_id, count)
     maxid = 0
+    @number = 0
     @data = Array.new
     loop_number.times do |num|
       options = {:count => count,:max_id => maxid}
@@ -106,10 +107,11 @@ class TwitterSearch
           download_image_url = doc.search('//meta[@property="og:image"]/@content').first
         end
       end
+      @number += 1
 
       @data << {
         :date => (Time.parse("#{status.created_at}")).strftime("%Y-%m-%d %H:%M:%S"),
-        :no => status[:id],
+        :no => @number,
         :id => status[:id],
         :snippet => status.text,
         :imageUrl => download_image_url
