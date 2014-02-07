@@ -28,6 +28,8 @@
         <select ng-model="orderProp">
           <option value="name">Name</option>
           <option value="id">ID</option>
+          <option value="no">NO</option>
+          <option value="date">DATE</option>
         </select>
 
       </div>
@@ -35,9 +37,10 @@
         <ul class="items">
           <li ng-repeat="item in items | filter:query | orderBy:orderProp" class="thumbnail">
             <a href="#/items/{{item.id}}" class="thumb"><img ng-src="{{item.imageUrl}}"></a>
-            <p><a href="#/items/{{item.id}}">{{item.name}}</a></p>
-            <p>{{item.id}}</p>
-            <p>{{item.snippet}}</p>
+            <p>Date:{{item.date}}</p>
+            <p>No.:{{item.no}}</p>
+            <p>ID:{{item.id}}</p>
+            <p>Tweet Text:{{item.snippet}}</p>
           </li>
         </ul>
 
