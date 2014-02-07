@@ -27,7 +27,6 @@
         Sort by:
         <select ng-model="orderProp">
           <option value="name">Name</option>
-          <option value="id">ID</option>
           <option value="no">NO</option>
           <option value="date">DATE</option>
         </select>
@@ -39,7 +38,6 @@
             <a href="#/items/{{item.id}}" class="thumb"><img ng-src="{{item.imageUrl}}"></a>
             <p>Date:{{item.date}}</p>
             <p>No.:{{item.no}}</p>
-            <p>ID:{{item.id}}</p>
             <p>Tweet Text:{{item.snippet}}</p>
           </li>
         </ul>
