@@ -1,19 +1,39 @@
 # Smokeymonkey Amazon Prize Life Gallery
 
-* すもけさんのAmazon救援物資リストを簡単に確認することができます
-* 現在は救援物資のみ表示できます
-* AngularJS + Node.jsを利用しています
+* すもけさんがみんなから受け取ったAmazonの救援物資を利用して自炊した画像を見れます
+* AngularJS + Sinatra を利用してHerokuで公開しています
 
-# 機能追加
+http://smokeymonkey-amazon-prize-life.herokuapp.com/
 
-* 救援物資の送付が終息気味なので、Twitterご飯の画像(ハッシュで検索)を表示するようにする
+* Twitter の #朝飯、#昼飯、#晩飯のツイートを取得しています
+
+# ツイートのデータ取得
+
+* rubyのスクリプトを実行してjsonファイルを作成している都合で今は僕が手動で作成してアップロードする形になっているのでデータの反映にタイムラグが発せいします。
 
 ## Requirements
 
 - AnguraJS v1.2.6
 - Node.js v0.10.13
+- Sinatra
+- Ruby 2.0.0
 
-## Configuration
+## Configuration for Sinatra
+
+### bundle install
+
+    $ bundle install
+
+### start server
+
+    $ cd smokeymonkey-amazon-prize-life
+    $ bundle exec rackup
+
+### Visit
+
+    http://0.0.0.0:9292/ with your favorite web browser.
+
+## Configuration for node.js
 
 ### node install
 
@@ -27,3 +47,4 @@
 ### Visit
 
     http://localhost:8000/app/index.html with your favorite web browser.
+
