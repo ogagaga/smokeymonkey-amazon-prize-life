@@ -46,5 +46,5 @@ http://smokeymonkey-amazon-prize-life.herokuapp.com/
 
 ### Visit
 
-    http://localhost:8000/app/index.html with your favorite web browser.
+    http://localhost:8000/public/index.html with your favorite web browser.
 
