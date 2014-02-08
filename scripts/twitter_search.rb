@@ -79,19 +79,14 @@ class TwitterSearch
     end
   end
 
-  def get_user_timeline(loop_number, user_id, count, since_id=nil, maxid=nil)
+  def get_user_timeline(loop_number, user_id, count)
     maxid = 0
     @data = Array.new
     loop_number.times do |num|
-      # >> make_options method にする
-      options = {:count => count, :max_id => maxid}
-      unless since_id.nil?
-        options = {:count => count, :max_id => maxid, :since_id => since_id}
-      end
+      options = {:count => count,:max_id => maxid}
       if num == 0
         options = {:count => count}
       end
-      # << make_options method にする
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
         # puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
@@ -104,7 +99,7 @@ class TwitterSearch
 
   def status_text_extract(status)
     if status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
-      puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+      # puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
       unless status.urls[0].nil?
         expanded_url = "#{status.urls[0].expanded_url}"
         unless expanded_url.match(%r{instagram.com}).nil?
@@ -130,13 +125,9 @@ class TwitterSearch
 
 end
 
-SINCE_ID = 431784301206978560
-LOOP_NUMBER = 1
-SEARCH_COUNT = 50
-SAVE_FILE = "../public/items/smokeymonkey_meal_tweet.json"
 twitter_search = TwitterSearch.new
-twitter_search.get_user_timeline(LOOP_NUMBER, "smokeymonkey", SEARCH_COUNT, SINCE_ID + 1)
-twitter_search.save(SAVE_FILE, "a")
+twitter_search.get_user_timeline(10, "smokeymonkey", 200)
+twitter_search.save("../public/items/smokeymonkey_meal_tweet.json", "a")
 # twitter_search.search
 # twitter_search.dump
 
