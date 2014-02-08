@@ -21,20 +21,21 @@
 
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span10">
-
-        Search: <input ng-model="query">
+      <div class="span10 form-inline filter-condition">
+        Search: <input ng-model="query" class="search-query">
         Sort by:
         <select ng-model="orderProp">
           <option value="name">Name</option>
           <option value="id">ID</option>
           <option value="date">DATE</option>
         </select>
-
+        <label class="checkbox reverse">
+          <input type="checkbox" ng-model="reverse">reverse
+        </label>
       </div>
       <div class="span10">
         <ul class="items">
-          <li ng-repeat="item in items | filter:query | orderBy:orderProp" class="thumbnail">
+          <li ng-repeat="item in items | filter:query | orderBy:orderProp:reverse" class="thumbnail">
             <a href="#/items/{{item.id}}" class="thumb"><img ng-src="{{item.imageUrl}}"></a>
             <p>Date:{{item.date}}</p>
             <p>ID.:{{item.id}}</p>
