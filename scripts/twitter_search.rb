@@ -79,14 +79,19 @@ class TwitterSearch
     end
   end
 
-  def get_user_timeline(loop_number, user_id, count)
+  def get_user_timeline(loop_number, user_id, count, since_id=nil, maxid=nil)
     maxid = 0
     @data = Array.new
     loop_number.times do |num|
-      options = {:count => count,:max_id => maxid}
+      # >> make_options method にする
+      options = {:count => count, :max_id => maxid}
+      unless since_id.nil?
+        options = {:count => count, :max_id => maxid, :since_id => since_id}
+      end
       if num == 0
         options = {:count => count}
       end
+      # << make_options method にする
       @results = @client.user_timeline(user_id, options)
       @results.each do |status|
         # puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
@@ -99,7 +104,7 @@ class TwitterSearch
 
   def status_text_extract(status)
     if status.text.match(%r{\#朝飯|\#昼飯|\#晩飯})
-      # puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
+      puts "(#{status[:created_at]})(#{status[:id]}) #{status[:user][:name]} #{status.text}"
       unless status.urls[0].nil?
         expanded_url = "#{status.urls[0].expanded_url}"
         unless expanded_url.match(%r{instagram.com}).nil?
@@ -118,16 +123,28 @@ class TwitterSearch
   end
 
   def save(file_name, mode)
+    array = Array.new
+
+    json_data = JSON.parse(File.read(file_name))
+    json_data.each { |data| array << data }
+
+    data = array.concat(@data)
+    # puts JSON.pretty_generate(data)
+
     File.open(file_name, mode) do |file|
-      file.puts JSON.pretty_generate(@data)
+      file.puts JSON.pretty_generate(data)
     end
   end
 
 end
 
+SINCE_ID = 431784301206978560
+LOOP_NUMBER = 1
+SEARCH_COUNT = 200
+SAVE_FILE = "../public/items/smokeymonkey_meal_tweet.json"
 twitter_search = TwitterSearch.new
-twitter_search.get_user_timeline(10, "smokeymonkey", 200)
-twitter_search.save("../public/items/smokeymonkey_meal_tweet.json", "a")
+twitter_search.get_user_timeline(LOOP_NUMBER, "smokeymonkey", SEARCH_COUNT, SINCE_ID + 1)
+twitter_search.save(SAVE_FILE, "w")
 # twitter_search.search
 # twitter_search.dump
 

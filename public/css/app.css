@@ -21,3 +21,9 @@ body {
   height: 300px;
   padding-top: 15px;
 }
+.filter-condition{
+  padding-bottom: 10px;
+}
+.reverse {
+  font-size: 15pt;
+}
