@@ -4,6 +4,17 @@ body {
   padding-top: 20px;
 }
 
+.snsb {
+	overflow: hidden;
+}
+.snsb li {
+	float: left;
+	margin-right: 4px;
+}
+.snsb iframe {
+	margin: 0 !important;
+}
+
 .items {
   list-style: none;
 }
