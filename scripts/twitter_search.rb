@@ -123,13 +123,9 @@ class TwitterSearch
   end
 
   def save(file_name, mode)
-    array = Array.new
-
     json_data = JSON.parse(File.read(file_name))
-    json_data.each { |data| array << data }
-
-    data = array.concat(@data)
-    # puts JSON.pretty_generate(data)
+    read_data = json_data.collect { |data| data }
+    data = read_data.concat(@data)
 
     File.open(file_name, mode) do |file|
       file.puts JSON.pretty_generate(data)
@@ -140,7 +136,7 @@ end
 
 # JSONデータ作成時はsmokeymonkey_meal_tweet.json
 # の最後のidに書き換えて実行する
-SINCE_ID = 431784301206978560
+SINCE_ID = 433369577347502080
 LOOP_NUMBER = 1
 SEARCH_COUNT = 200
 SAVE_FILE = "../public/items/smokeymonkey_meal_tweet.json"
