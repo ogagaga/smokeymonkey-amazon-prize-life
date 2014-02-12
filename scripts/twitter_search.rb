@@ -85,11 +85,11 @@ class TwitterSearch
     loop_number.times do |num|
       # >> make_options method にする
       options = {:count => count, :max_id => maxid}
-      unless since_id.nil?
-        options = {:count => count, :max_id => maxid, :since_id => since_id}
-      end
       if num == 0
         options = {:count => count}
+      end
+      unless since_id.nil?
+        options = {:count => count, :since_id => since_id}
       end
       # << make_options method にする
       @results = @client.user_timeline(user_id, options)
@@ -138,6 +138,8 @@ class TwitterSearch
 
 end
 
+# JSONデータ作成時はsmokeymonkey_meal_tweet.json
+# の最後のidに書き換えて実行する
 SINCE_ID = 431784301206978560
 LOOP_NUMBER = 1
 SEARCH_COUNT = 200
