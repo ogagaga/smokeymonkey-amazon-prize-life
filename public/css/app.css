@@ -2,6 +2,19 @@
 
 body {
   padding-top: 20px;
+  background: #F1B82C;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.userphoto {
+	margin-right: 4px;
+}
+
+.userphoto img {
+	margin-right: 4px;
+  border-style: solid;
+  border-width: 1px;
 }
 
 .snsb {
