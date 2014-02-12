@@ -2,14 +2,11 @@
 
 * すもけさんがみんなから受け取ったAmazonの救援物資を利用して自炊した画像を見れます
 * AngularJS + Sinatra を利用してHerokuで公開しています
-
-http://smokeymonkey-amazon-prize-life.herokuapp.com/
-
 * Twitter の #朝飯、#昼飯、#晩飯のツイートを取得しています
 
 # ツイートのデータ取得
 
-* rubyのスクリプトを実行してjsonファイルを作成している都合で今は僕が手動で作成してアップロードする形になっているのでデータの反映にタイムラグが発せいします。
+* JSONデータは手動作成のためデータの反映にタイムラグが発生します
 
 ## Requirements
 
