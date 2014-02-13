@@ -39,11 +39,13 @@
       </div>
       <div class="span10">
         <ul class="items">
-          <li ng-repeat="item in items | filter:query | orderBy:orderProp:reverse" class="thumbnail">
-            <a href="#/items/{{item.id}}" class="thumb"><img ng-src="{{item.imageUrl}}"></a>
-            <p>Date:{{item.date}}</p>
-            <p>ID.:{{item.id}}</p>
-            <p>Tweet Text:{{item.snippet}}</p>
+          <li ng-repeat="item in items | filter:query | orderBy:orderProp:reverse">
+            <div class="item">
+              <a href="#/items/{{item.id}}" class="thumb"><img ng-src="{{item.imageUrl}}"></a>
+              <p>Date:{{item.date}}</p>
+              <p>ID.:{{item.id}}</p>
+              <p>Tweet Text:{{item.snippet}}</p>
+            </div>
           </li>
         </ul>
 

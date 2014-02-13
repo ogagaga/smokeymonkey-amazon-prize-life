@@ -29,22 +29,31 @@ body {
 }
 
 .items {
-  list-style: none;
+  /* list-style: none; */
 }
 
-.thumb {
-  float: left;
-  margin: -1em 1em 1.5em 0em;
-  padding-bottom: 1em;
+.items li {
+ padding-top: 15px;
+ margin: 20px;
+ width: 400px;
+ height: 450px;
+ display: inline-block;
+}
+
+.item {
+  margin: 20px;
+  padding:5px;
+  background-color:#ffffff;
+  -webkit-box-shadow: 0 10px 8px -6px #8d8c8c;
+  -moz-box-shadow: 0 10px 8px -6px #8d8c8c;
+  box-shadow: 0 10px 8px -6px #8d8c8c;
+}
+
+.thumbnail {
   height: 300px;
   width: 300px;
 }
 
-.items li {
-  clear: both;
-  height: 300px;
-  padding-top: 15px;
-}
 .filter-condition{
   padding-bottom: 10px;
 }
