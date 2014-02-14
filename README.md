@@ -43,5 +43,8 @@
 
 ### Visit
 
-    http://localhost:8000/public/index.html with your favorite web browser.
+    http://localhost:8000/index.html with your favorite web browser.
+
+## Configuration for Github Pages
+    push to github as 'gh-pages' branch and access to http://<username>.github.io/smokeymonkey-amazon-prize-life/
 
