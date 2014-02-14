@@ -21,4 +21,5 @@ smokeymonkeyControllers.controller('ItemListCtrl', ['$scope', '$http',
 
     $scope.orderProp = 'id';
     $scope.reverse = true;
+    $scope.query = '';
   }]);
