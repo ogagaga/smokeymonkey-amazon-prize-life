@@ -23,6 +23,18 @@ class TwitterSearch
     end
   end
 
+  def since_id
+    @since_id_params = YAML.load(File.open('since_id.yml'))
+    @since_id_params['twitter']['since_id']
+  end
+
+  def save_since_id
+    @since_id_params['twitter']['since_id'] = @last_tweet_id
+    open("since_id.yml","w") do |f|
+      YAML.dump(@since_id_params, f)
+    end
+  end
+
   def dump
     @results.each do |status|
       pp status.to_hash
@@ -100,6 +112,14 @@ class TwitterSearch
       end
     end
     @data.sort!{ |a, b| a[:date] <=> b[:date] }
+    last = @data.count - 1
+    @data.each_with_index do |status, index|
+      # puts "index:#{index}"
+      if last == index
+        @last_tweet_id = status[:id]
+      end
+    end
+    # puts @last_tweet_id
   end
 
   def status_text_extract(status)
@@ -136,13 +156,16 @@ end
 
 # JSONデータ作成時はsmokeymonkey_meal_tweet.json
 # の最後のidに書き換えて実行する
-SINCE_ID = 433369577347502080
+# SINCE_ID = 433913962540044289
 LOOP_NUMBER = 1
 SEARCH_COUNT = 200
 SAVE_FILE = "../public/items/smokeymonkey_meal_tweet.json"
 twitter_search = TwitterSearch.new
-twitter_search.get_user_timeline(LOOP_NUMBER, "smokeymonkey", SEARCH_COUNT, SINCE_ID + 1)
+since_id = twitter_search.since_id
+# puts since_id
+twitter_search.get_user_timeline(LOOP_NUMBER, "smokeymonkey", SEARCH_COUNT, since_id + 1)
 twitter_search.save(SAVE_FILE, "w")
+twitter_search.save_since_id
 # twitter_search.search
 # twitter_search.dump
 
