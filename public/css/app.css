@@ -5,6 +5,30 @@ body {
   background: #F1B82C;
 	margin-left: 4px;
 	margin-right: 4px;
+  height: 100%;
+}
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin:0px 10px 0px 0px;
+}
+
+#push,
+#footer {
+  height: 60px;
+}
+#footer {
+  background-color: #f5f5f5;
+}
+
+#wrap > .container {
+  padding-top: 60px;
+}
+
+.container .text-center {
+  text-align: center;
+	margin-top: 5px;
 }
 
 .userphoto {
