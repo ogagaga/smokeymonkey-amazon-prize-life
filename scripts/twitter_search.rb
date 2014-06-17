@@ -128,8 +128,16 @@ class TwitterSearch
       unless status.urls[0].nil?
         expanded_url = "#{status.urls[0].expanded_url}"
         unless expanded_url.match(%r{instagram.com}).nil?
-          doc = Nokogiri::HTML(open(expanded_url))
-          download_image_url = doc.search('//meta[@property="og:image"]/@content').first
+          begin
+            file = open(expanded_url)
+            puts "file:#{file}"
+            doc = Nokogiri::HTML(file) do
+              # handle doc
+            end
+            download_image_url = doc.search('//meta[@property="og:image"]/@content').first
+          rescue OpenURI::HTTPError => e
+            puts "error"
+          end
         end
       end
 
