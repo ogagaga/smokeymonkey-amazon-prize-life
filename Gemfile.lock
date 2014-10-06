@@ -23,6 +23,8 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.2)
       rack
+    rake (10.1.1)
+    redis (3.0.7)
     simple_oauth (0.2.0)
     sinatra (1.4.4)
       rack (~> 1.4)
@@ -52,6 +54,8 @@ PLATFORMS
 
 DEPENDENCIES
   nokogiri
+  rake
+  redis
   sinatra
   thin
   twitter
